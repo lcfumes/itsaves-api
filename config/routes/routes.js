@@ -4,7 +4,12 @@ module.exports = [
   { 
     method: 'GET',
     path: '/',
-    config: BookmarkController.itsWorking
+    config: BookmarkController.itsWorking,
+  },
+  {
+    method: 'GET',
+    path: '/getAll',
+    config: BookmarkController.getAll,
   },
   // {
   //   method: 'GET',

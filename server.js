@@ -18,14 +18,11 @@ if (env === undefined) {
 const configFile = `./config/config.${env}.json`;
 /* eslint-disable import/no-dynamic-require */
 const config = require(configFile);
-const database = require('mongoose');
+const mongoose = require('mongoose');
 const good = require('good');
 const routes = require('./config/routes/routes.js');
 
-global.config = config;
-global.database = database;
-
-database.connect(config.database.connection);
+mongoose.connect(config.database.connection);
 
 const options = {
   ops: {

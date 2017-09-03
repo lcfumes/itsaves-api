@@ -1,7 +1,8 @@
+const mongoose = require('mongoose');
+
 const bookmarkSchema = require('../config/bookmark.schema.js');
 
-/* global database */
-const Model = database.Model('Bookmarks', bookmarkSchema, 'bookmark');
+const Model = mongoose.model('Bookmarks', bookmarkSchema);
 
 module.exports.totalDocs = (callback) => {
   Model.count({}, (err, count) => {
