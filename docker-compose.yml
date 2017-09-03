@@ -1,0 +1,18 @@
+itsav.es:
+    build: "./docker/"
+    ports:
+        - "3300:3300"
+    volumes:
+        - ./:/app
+    environment:
+        - VIRTUAL_HOST=dev.itsav.es
+    tty: true
+    links:
+        - mongo:mongodb.dev
+
+mongo:
+    image: mongo:latest
+    ports:
+        - "27017:27017"
+    environment:
+        - VIRTUAL_HOST:mongodb.dev
