@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-const bookmarkSchema = require('../config/bookmark.schema.js');
+const bookmarksSchema = require('../config/bookmarks.schema.js');
 
-const Model = mongoose.model('Bookmarks', bookmarkSchema);
+const Model = mongoose.model('Bookmarks', bookmarksSchema, 'bookmarks');
 
 module.exports.totalDocs = (callback) => {
   Model.count({}, (err, count) => {
@@ -15,7 +15,7 @@ module.exports.findAll = (page, limit, callback) => {
     .skip((parseInt(page, 10) * parseInt(limit, 10)))
     .limit(parseInt(limit, 10))
     .sort({
-      created_at: 'desc',
+      createdAt: 'desc',
     })
     .exec((err, doc) => {
       callback(doc);
@@ -36,18 +36,19 @@ module.exports.findByFields = (object, callback) => {
   });
 };
 
-module.exports.create = (payload, ip, callback) => {
+module.exports.create = (payload, callback) => {
   this.findByUrl(payload.url, (err, doc) => {
     if (doc !== null) {
       callback(err, doc, false);
       return;
     }
     const bookmark = new Model({
+      userId: payload.userId,
       url: payload.url,
       title: payload.title,
       description: payload.description,
-      created_at: new Date().getTime(),
-      updated_at: new Date().getTime(),
+      createdAt: new Date().getTime(),
+      updatedAt: new Date().getTime(),
     });
 
     bookmark.save((errSave) => {
@@ -59,7 +60,7 @@ module.exports.create = (payload, ip, callback) => {
     });
   });
 };
-module.exports.update = (request, ip, callback) => {
+module.exports.update = (request, callback) => {
   const query = {
     url: request.params.url,
   };
@@ -68,7 +69,7 @@ module.exports.update = (request, ip, callback) => {
       url: request.payload.url,
       title: request.payload.title,
       description: request.payload.description,
-      updated_at: new Date().getTime(),
+      updatedAt: new Date().getTime(),
     },
   };
   this.findByUrl(request.params.url, (err, doc) => {

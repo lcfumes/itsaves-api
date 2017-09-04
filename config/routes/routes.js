@@ -1,4 +1,5 @@
 const BookmarkController = require('../../controllers/BookmarkController.js');
+const UserController = require('../../controllers/UserController.js');
 
 module.exports = [
   { 
@@ -8,14 +9,24 @@ module.exports = [
   },
   {
     method: 'GET',
-    path: '/getAll',
+    path: '/bookmark/all',
     config: BookmarkController.getAll,
   },
-  // {
-  //   method: 'GET',
-  //   path: '/total',
-  //   config: UrlController.urlGetTotalConfig
-  // },
+  {
+    method: 'POST',
+    path: '/bookmark/create',
+    config: BookmarkController.create,
+  },
+  {
+    method: 'GET',
+    path: '/user',
+    config: UserController.getUser
+  },
+  {
+    method: 'POST',
+    path: '/user/create',
+    config: UserController.create
+  },
   // { 
   //   method: 'GET', 
   //   path: '/{hash}', 
