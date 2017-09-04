@@ -1,5 +1,8 @@
 {
   "database": {
     "connection": "mongodb://mongodb.dev/itsaves"
+  },
+  "authentication": {
+    "secret": "_#1t54v5@"
   }
 }

@@ -4,10 +4,14 @@ const Joi = require('joi');
 
 module.exports.handlerGetUser = (request, reply) => {
   userModel.findBySocialId(request.headers.socialid, (err, doc) => {
-    if (!err) {
-      return reply(doc).code(200);
+    if (err) {
+      return reply().code(500);
     }
-    return reply({}).code(404);
+    if (!doc) {
+      return reply({}).code(404);
+    }
+    userEntity.setUsers(doc);
+    return reply(userEntity.getUsers()).code(200);
   });
 };
 

@@ -1,22 +1,28 @@
-module.exports.setBookmarks = (bookmarks, total) => {
-  if (bookmarks === null) {
+module.exports.setBookmarks = (bookmarks) => {
+  this.bookmarks = {
+    total: 0,
+    _embedded: {},
+  };
+
+  if (bookmarks === undefined) {
     return;
   }
+
   let docs = bookmarks;
   if (!Array.isArray(bookmarks)) {
     docs = [
       bookmarks,
     ];
   }
-  this.count = docs.length;
-  this.bookmarks = docs;
-  this.total = total;
+  this.total = docs.length;
+
+  this.bookmarks = {
+    total: this.total,
+    _embedded: docs,
+  };
 };
 
-module.exports.getBookmarks = () => (
-  {
-    count: this.count,
-    total: this.total,
-    _embedded: this.bookmarks,
-  }
-);
+module.exports.getBookmarks = () => {
+  const bookmarks = this.bookmarks;
+  return bookmarks;
+};

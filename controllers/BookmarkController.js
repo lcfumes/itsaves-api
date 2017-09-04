@@ -1,8 +1,8 @@
 const bookmarkModel = require('../models/BookmarkModel');
-const userModel = require('../models/UserModel');
 const bookmarkEntity = require('../entities/BookmarkEntity');
 const Joi = require('joi');
 
+/* Without Authentication */
 module.exports.handlerItsWorking = (request, reply) => {
   reply("It's working").code(200);
 };
@@ -34,12 +34,50 @@ module.exports.getAll = {
   },
 };
 
+/* With Authentication */
+module.exports.handlerFindBookmark = (request, reply) => {
+  // eslint-disable-next-line consistent-return
+  request.server.auth.test('token', request, (errAuth, credentials) => {
+    if (errAuth) {
+      // eslint-disable-next-line no-console
+      console.log(errAuth);
+      return reply().code(500);
+    }
+    bookmarkModel.findByUserAndId(credentials.id, request.params.id, (err, doc) => {
+      if (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+        return reply().code(500);
+      }
+      if (!doc) {
+        return reply({}).code(404);
+      }
+      return reply(doc).code(200);
+    });
+  });
+};
+
+module.exports.findBookmark = {
+  auth: 'token',
+  handler: this.handlerFindBookmark,
+  description: 'Returns one specific bookmark of user',
+  notes: 'Returns total and bookmark of user if found',
+  tags: ['api', 'bookmarks', 'list'],
+  validate: {
+    params: {
+      id: Joi.string().required().description('Bookmark ID'),
+    },
+    headers: Joi.object().keys({
+      'content-type': Joi.string().required().valid(['application/json']).default('application/json'),
+      'x-access-token': Joi.string().required().description('Auth Token'),
+    }).unknown(),
+  },
+};
+
 module.exports.handlerCreate = (request, reply) => {
-  userModel.findById(request.headers.userid, (err, doc) => {
-    /* eslint-disable no-underscore-dangle */
-    const userId = doc._id;
+  request.server.auth.test('token', request, (err, credentials) => {
     const bookmark = {
-      userId,
+      userId: credentials.id,
       url: request.payload.url,
       title: request.payload.title,
       description: request.payload.description,
@@ -61,6 +99,7 @@ module.exports.handlerCreate = (request, reply) => {
 };
 
 module.exports.create = {
+  auth: 'token',
   handler: this.handlerCreate,
   description: 'Create a new bookmark',
   notes: 'Create a new bookmark and returns all the information',
@@ -68,12 +107,51 @@ module.exports.create = {
   validate: {
     headers: Joi.object().keys({
       'content-type': Joi.string().required().valid(['application/json']).default('application/json'),
-      userid: Joi.string().min(1).required().description('User ID'),
+      'x-access-token': Joi.string().required().description('Auth Token'),
     }).unknown(),
     payload: {
       url: Joi.string().min(1).required().description('URL'),
       title: Joi.string().min(1).required().description('Url Title'),
       description: Joi.string().min(1).description('Description'),
     },
+  },
+};
+
+module.exports.handlerDeleteBookmark = (request, reply) => {
+  // eslint-disable-next-line consistent-return
+  request.server.auth.test('token', request, (errAuth, credentials) => {
+    if (errAuth) {
+      // eslint-disable-next-line no-console
+      console.log(errAuth);
+      return reply().code(500);
+    }
+    bookmarkModel.deleteByUserAndId(credentials.id, request.params.id, (err, removed) => {
+      if (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+        return reply().code(500);
+      }
+      if (!removed) {
+        return reply().code(204);
+      }
+      return reply().code(202);
+    });
+  });
+};
+
+module.exports.deleteBookmark = {
+  auth: 'token',
+  handler: this.handlerDeleteBookmark,
+  description: 'Delete an bookmark',
+  notes: 'Delete an bookmark',
+  tags: ['api', 'bookmark', 'delete'],
+  validate: {
+    params: {
+      id: Joi.string().required().description('Bookmark ID'),
+    },
+    headers: Joi.object().keys({
+      'content-type': Joi.string().required().valid(['application/json']).default('application/json'),
+      'x-access-token': Joi.string().required().description('Auth Token'),
+    }).unknown(),
   },
 };

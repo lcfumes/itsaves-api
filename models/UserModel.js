@@ -46,6 +46,15 @@ module.exports.findBySocialId = (socialId, callback) => {
   });
 };
 
+module.exports.findBySocialIdAndType = (socialId, type, callback) => {
+  Model.findOne({
+    socialId,
+    type,
+  }, (err, doc) => {
+    callback(err, doc);
+  });
+};
+
 module.exports.findByFields = (object, callback) => {
   Model.findOne(object, (err, doc) => {
     callback(err, doc);

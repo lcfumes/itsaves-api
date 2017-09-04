@@ -30,6 +30,23 @@ module.exports.findByUrl = (url, callback) => {
   });
 };
 
+module.exports.findByUserAndId = (userId, bookmarkId, callback) => {
+  Model.findOne({
+    _id: mongoose.Types.ObjectId(bookmarkId),
+    userId: mongoose.Types.ObjectId(userId),
+  }, (err, doc) => {
+    callback(err, doc);
+  });
+};
+
+module.exports.findById = (bookmarkId, callback) => {
+  Model.findOne({
+    _id: mongoose.Types.ObjectId(bookmarkId),
+  }, (err, doc) => {
+    callback(err, doc);
+  });
+};
+
 module.exports.findByFields = (object, callback) => {
   Model.findOne(object, (err, doc) => {
     callback(err, doc);
@@ -88,6 +105,35 @@ module.exports.update = (request, callback) => {
     } else {
       callback(null, [], false);
     }
+  });
+};
+
+module.exports.deleteByUserAndId = (userId, bookmarkId, callback) => {
+  this.findByUserAndId(userId, bookmarkId, (err, doc) => {
+    if (doc === null || err) {
+      callback(err, false);
+      return;
+    }
+    Model.remove({
+      _id: mongoose.Types.ObjectId(bookmarkId),
+      userId: mongoose.Types.ObjectId(userId),
+    }, (errRemove) => {
+      callback(errRemove, true);
+    });
+  });
+};
+
+module.exports.deleteById = (bookmarkId, callback) => {
+  this.findById(bookmarkId, (err, doc) => {
+    if (doc === null || err) {
+      callback(err, false);
+      return;
+    }
+    Model.remove({
+      _id: mongoose.Types.ObjectId(bookmarkId),
+    }, (errRemove) => {
+      callback(errRemove, true);
+    });
   });
 };
 

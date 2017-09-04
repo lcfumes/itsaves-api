@@ -1,5 +1,6 @@
 const BookmarkController = require('../../controllers/BookmarkController.js');
 const UserController = require('../../controllers/UserController.js');
+const LoginController = require('../../controllers/LoginController.js');
 
 module.exports = [
   { 
@@ -13,9 +14,24 @@ module.exports = [
     config: BookmarkController.getAll,
   },
   {
+    method: 'GET',
+    path: '/bookmark/{id}',
+    config: BookmarkController.findBookmark,
+  },
+  {
+    method: 'DELETE',
+    path: '/bookmark/{id}',
+    config: BookmarkController.deleteBookmark,
+  },
+  {
     method: 'POST',
     path: '/bookmark/create',
     config: BookmarkController.create,
+  },
+  {
+    method: 'POST',
+    path: '/user/authenticate',
+    config: LoginController.authenticate
   },
   {
     method: 'GET',
@@ -27,34 +43,4 @@ module.exports = [
     path: '/user/create',
     config: UserController.create
   },
-  // { 
-  //   method: 'GET', 
-  //   path: '/{hash}', 
-  //   config: UrlController.urlFindConfig
-  // },
-  // { 
-  //   method: 'POST', 
-  //   path: '/',
-  //   config: UrlController.urlCreateConfig
-  // },
-  // { 
-  //   method: 'PUT', 
-  //   path: '/{hash}',
-  //   config: UrlController.urlUpdateConfig
-  // },
-  // { 
-  //   method: 'DELETE', 
-  //   path: '/{hash}', 
-  //   config: UrlController.urlDeleteConfig
-  // },
-  // {
-  //   method: 'GET',
-  //   path: '/redirect/{hash}',
-  //   config: UrlController.urlFindToRedirectConfig
-  // },
-  // {
-  //   method: 'POST',
-  //   patch: '/user/create',
-  //   config: UserController.createUser
-  // }
 ];

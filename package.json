@@ -1,14 +1,29 @@
 {
-  "name": "it-saves",
+  "name": "it-saves-api",
   "version": "0.0.1",
   "description": "",
-  "author": "Luiz Fumes <lcfumes@gmail.com>",
+  "author": [
+    {
+      "name": "Luiz Fumes",
+      "email": "lcfumes@gmail.com",
+      "url": "http://fumes.com.br"
+    }
+  ],
   "main": "server.js",
   "scripts": {
     "eslint": "eslint config/**.js controllers/**.js entities/**.js models/**.js server.js",
     "dev": "NODE_ENV=dev node server.js",
     "live": "NODE_ENV=live node server.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:lcfumes/itsaves-api.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lcfumes/itsaves-api/issues"
+  },
+  "homepage": "https://github.com/lcfumes/itsaves-api/blob/master/README.md",
   "dependencies": {
     "good": "^7.1.0",
     "good-console": "^6.2.0",
@@ -16,9 +31,13 @@
     "good-http": "^6.1.2",
     "good-squeeze": "^5.0.1",
     "hapi": "^16.1.0",
+    "hapi-swagger": "^7.7.1",
+    "inert": "^4.2.1",
     "joi": "^10.6.0",
+    "jsonwebtoken": "^7.4.3",
     "mongoose": "^4.11.9",
-    "request": "^2.79.0"
+    "request": "^2.79.0",
+    "vision": "^4.1.1"
   },
   "devDependencies": {
     "eslint": "^4.5.0",
@@ -26,6 +45,7 @@
     "eslint-config-airbnb-base": "^11.3.2",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
-    "eslint-plugin-react": "^7.3.0"
+    "eslint-plugin-react": "^7.3.0",
+    "swagger": "^0.7.5"
   }
 }

@@ -1,8 +1,12 @@
 const Hapi = require('hapi');
+const Inert = require('inert');
+const Vision = require('vision');
+const HapiSwagger = require('hapi-swagger');
+const Pack = require('./package');
 
 const server = new Hapi.Server();
 server.connection({
-  port: 3300,
+  port: 3500,
   routes: {
     cors: true,
   },
@@ -10,58 +14,56 @@ server.connection({
 
 const env = process.env.NODE_ENV;
 if (env === undefined) {
-  /* eslint-disable no-console */
+  // eslint-disable-next-line no-console
   console.log('ENV not declared. Config file cannot be found.');
   process.exit(1);
 }
 
 const configFile = `./config/config.${env}.json`;
-/* eslint-disable import/no-dynamic-require */
+// eslint-disable-next-line import/no-dynamic-require
 const config = require(configFile);
 const mongoose = require('mongoose');
-const good = require('good');
-const routes = require('./config/routes/routes.js');
+const Routes = require('./config/routes/routes.js');
+
+global.Config = config;
 
 mongoose.connect(config.database.connection);
 
-const options = {
-  ops: {
-    interval: 1000,
-  },
-  reporters: {
-    myConsoleReporter: [{
-      module: 'good-squeeze',
-      name: 'Squeeze',
-      args: [{ log: '*', response: '*' }],
-    }, {
-      module: 'good-console',
-    }, 'stdout'],
-    myFileReporter: [{
-      module: 'good-squeeze',
-      name: 'Squeeze',
-      args: [{ ops: '*' }],
-    }, {
-      module: 'good-squeeze',
-      name: 'SafeJson',
-    }],
-    myHTTPReporter: [{
-      module: 'good-squeeze',
-      name: 'Squeeze',
-      args: [{ error: '*' }],
-    }],
-  },
-};
+const AuthService = require('./services/AuthService');
 
-server.register({
-  register: good,
-  options,
-}, (err) => {
-  if (err) {
-    console.log(err);
-  } else {
-    server.route(routes);
-    server.start(() => {
+server.auth.scheme('custom', AuthService.tokenAuthorization);
+server.auth.strategy('token', 'custom');
+server.route(Routes);
+
+if (env === 'development') {
+  server.register([
+    Inert,
+    Vision,
+    {
+      register: HapiSwagger,
+      options: {
+        info: {
+          title: 'It Saves API Documentation',
+          version: Pack.version,
+        },
+      },
+    },
+  ],
+  () => {
+    server.start((err) => {
+      if (err) {
+        throw err;
+      }
+      // eslint-disable-next-line no-console
       console.log(`Server running at: ${server.info.uri}`);
     });
-  }
-});
+  });
+} else {
+  server.start((err) => {
+    if (err) {
+      throw err;
+    }
+    // eslint-disable-next-line no-console
+    console.log(`Server running at: ${server.info.uri}`);
+  });
+}
