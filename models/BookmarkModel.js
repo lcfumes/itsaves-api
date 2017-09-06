@@ -30,6 +30,15 @@ module.exports.findByUrl = (url, callback) => {
   });
 };
 
+module.exports.findByUrlAndUserId = (userId, url, callback) => {
+  Model.findOne({
+    userId,
+    url,
+  }, (err, doc) => {
+    callback(err, doc);
+  });
+};
+
 module.exports.findByUserAndId = (userId, bookmarkId, callback) => {
   Model.findOne({
     _id: mongoose.Types.ObjectId(bookmarkId),
@@ -53,8 +62,8 @@ module.exports.findByFields = (object, callback) => {
   });
 };
 
-module.exports.create = (payload, callback) => {
-  this.findByUrl(payload.url, (err, doc) => {
+module.exports.create = (userId, payload, callback) => {
+  this.findByUrlAndUserId(userId, payload.url, (err, doc) => {
     if (doc !== null) {
       callback(err, doc, false);
       return;

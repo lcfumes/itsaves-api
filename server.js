@@ -6,7 +6,7 @@ const Pack = require('./package');
 
 const server = new Hapi.Server();
 server.connection({
-  port: 3500,
+  port: 3333,
   routes: {
     cors: true,
   },

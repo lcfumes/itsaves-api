@@ -82,7 +82,7 @@ module.exports.handlerCreate = (request, reply) => {
       title: request.payload.title,
       description: request.payload.description,
     };
-    bookmarkModel.create(bookmark, (errCreate, result, created) => {
+    bookmarkModel.create(credentials.id, bookmark, (errCreate, result, created) => {
       if (errCreate) {
         return reply().code(500);
       }

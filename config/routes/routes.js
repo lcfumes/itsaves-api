@@ -1,6 +1,7 @@
 const BookmarkController = require('../../controllers/BookmarkController.js');
 const UserController = require('../../controllers/UserController.js');
 const LoginController = require('../../controllers/LoginController.js');
+const CategoryController = require('../../controllers/CategoryController.js');
 
 module.exports = [
   { 
@@ -42,5 +43,10 @@ module.exports = [
     method: 'POST',
     path: '/user/create',
     config: UserController.create
+  },
+  {
+    method: 'POST',
+    path: '/category/create',
+    config: CategoryController.create
   },
 ];
