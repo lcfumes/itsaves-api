@@ -7,4 +7,4 @@ ADD . /app
 
 EXPOSE 3300
 
-CMD ["node-dev", "server.js"]
+CMD ["node-dev", "bootstrap.js"]

@@ -8,11 +8,13 @@ itsav.es:
         - VIRTUAL_HOST=dev.itsav.es
     tty: true
     links:
-        - mongo:mongodb.dev
+        - db.itsav.es:db-dev.itsav.es
 
-mongo:
-    image: mongo:latest
+db.itsav.es:
+    image: mariadb:10.3
     ports:
-        - "27017:27017"
+        - "3306:3306"
     environment:
-        - VIRTUAL_HOST:mongodb.dev
+        - VIRTUAL_HOST=db-dev.itsav.es
+        - MYSQL_ROOT_PASSWORD=root-itsaves
+        - MYSQL_DATABASE=itsaves

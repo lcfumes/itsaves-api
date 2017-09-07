@@ -1,0 +1,11 @@
+{
+  "database": {
+    "host": "db-dev.itsav.es",
+    "user": "root",
+    "password": "root-itsaves",
+    "database": "itsaves"
+  },
+  "authentication": {
+    "secret": "_#1t54v5@"
+  }
+}
