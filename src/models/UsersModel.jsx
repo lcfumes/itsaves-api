@@ -73,7 +73,7 @@ export default class UsersModel {
 
   findBySocialId(callbackFn) {
     this.connection.query(`
-      SELECT id_user, name, email, social_id, type, created_at, updated_at FROM users WHERE social_id="${this.social_id}"`, 
+      SELECT id_user, name, email, social_id, type, created_at, updated_at FROM ${this.table} WHERE social_id="${this.social_id}"`, 
       (error, results, fields) => {
         if (!error) {
           this.populate(results);
