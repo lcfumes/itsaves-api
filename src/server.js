@@ -4,6 +4,7 @@ import Vision from 'vision';
 import HapiSwagger from 'hapi-swagger';
 import Pack from '../package';
 import ConfigService from './services/ConfigService';
+import AuthService from './services/AuthService';
 import Routes from './config/routes/routes';
 
 const server = new Hapi.Server();
@@ -16,10 +17,8 @@ server.connection({
 
 const objConfigService = new ConfigService();
 
-// const AuthService = require('./services/AuthService');
-
-// server.auth.scheme('custom', AuthService.tokenAuthorization);
-// server.auth.strategy('token', 'custom');
+server.auth.scheme('custom', AuthService.tokenAuthorization);
+server.auth.strategy('token', 'custom');
 
 server.route(Routes);
 
